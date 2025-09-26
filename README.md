@@ -343,29 +343,29 @@ Nesta seção, detalhamos as tecnologias escolhidas e explicamos, o porquê de c
 
 ##### Back-end
 -	**Node.js + Express.js:** APIs para upload de documentos, geração de relatórios e envio de notificações por e-mail.
--	**TypeScript:** Tipagem nos modelos de TaxDocument, Client e AlertSetting para evitar erros no código.
+-	**JavaScript:** Linguagem principal do backend.
 -	**Prisma ORM:** Migrations automáticas ao alterar esquema de obrigações; performance otimizada para consultas de prazos.
--	**JWT + OAuth2:** Autenticação de contadores e clientes, garantindo acesso apenas a dados de sua própria empresa.
+-	**JWT:** Autenticação de contadores e clientes, garantindo acesso apenas a dados de sua própria empresa.
 -	**Jest:** testes unitários.
 ##### Banco de Dados e Cache
 -	**PostgreSQL:** armazenamento relacional. Justificativa: suporta até 5M docs/mês, particionamento por data e índices B-tree para consultas rápidas.
--	**Redis:** Cache de dashboards de KPIs fiscais e consultas de calendário para reduzir latência.
+-	**Redis(planejado:** Cache de dashboards de KPIs fiscais e consultas de calendário para reduzir latência.
 ##### Armazenamento e Mensageria
 -	**AWS S3 (ou MinIO):** armazenamento de PDFs.
 -	**RabbitMQ (ou Kafka):** Fila para processar alertas de vencimento e envio de e-mails sem bloquear o usuário.
 #### Infraestrutura e DevOps
--	**Docker + Kubernetes:** Containers para serviços de upload, geração de relatórios e workers; HPA para manter desempenho sob pico de envios.
+-	**Docker:** Containers para serviços de upload, geração de relatórios e workers; HPA para manter desempenho sob pico de envios.
 -	**GitHub Actions:** Pipelines para build, testes e deploy automático de novas versões do SGOT.
--	**Vault:** Armazenar chaves de acesso ao S3, credenciais de SMTP e segredos de token JWT.
+-	**Kubernetes (planejado):** Orquestração de containers com auto-scaling horizontal.
 #### Monitoramento e Qualidade de Código
 -	**Sentry:** Envia alertas de erros em endpoints críticos, como upload e geração de relatórios.
 -	**ESLint + Prettier:** Garantem estilo consistente em arquivos de configuração de tributos e scripts de migração.
--	**Docker + Kubernetes:** conteinerização e orquestração com auto-scaling horizontal.
+-	**Docker:** conteinerização e orquestração com auto-scaling horizontal.
 
 ### 3.5 Arquitetura do Sistema
 Como o sistema gerencia tributos de várias empresas, precisa ser robusto e escalável:
 -	**Escalabilidade:**
-    -	Kubernetes HPA aumenta pods do serviço de relatórios quando muitos usuários requisitam cronogramas.
+    -	Kubernetes (planejado) HPA aumenta pods do serviço de relatórios quando muitos usuários requisitam cronogramas.
     -	Auto-scaling de nós para suportar picos de importação de documentos no fim do mês.
 -	**Tolerância a Falhas:**
     -	TaxUploadService usa retry e circuit-breaker; falhas de envio de e-mail são enfileiradas para nova tentativa.
@@ -380,7 +380,7 @@ Como o sistema gerencia tributos de várias empresas, precisa ser robusto e esca
 
 ### 3.6 Roadmap / Futuras Integrações
 -	RF-F01 (futuro) – Integrar via API REST com ERP externo (ex.: ContaAzul) para sincronização de cadastros e obrigações.
- 
+-   Kubernetes para orquestração de containers.
 
 ## 4. Próximos Passos
 -	Implementação do backend e frontend inicial.
@@ -395,4 +395,5 @@ Como o sistema gerencia tributos de várias empresas, precisa ser robusto e esca
 **Considerações Professor/a:**  
 **Considerações Professor/a:**  
 **Considerações Professor/a:**
+
 
