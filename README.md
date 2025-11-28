@@ -1,4 +1,4 @@
-﻿﻿# Sistema de Gestão de Obrigações Tributárias
+﻿﻿# SGOT - Sistema de Gestão de Obrigações Tributárias
 📌 **Acesse o repositório no GitHub:** [SGOT - Sistema de Gestão de Obrigações Tributárias](https://github.com/edsonpolucena/SGOT)
 
 ## Capa
@@ -422,6 +422,7 @@ TAXGROUP. Multa fiscal: saiba o que é e quando ocorre. Taxgroup, 15 mar. 2023. 
 **Considerações Professor/a:**  
 **Considerações Professor/a:**  
 **Considerações Professor/a:**
+
 
 
 
