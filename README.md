@@ -56,7 +56,6 @@ Desenvolver um sistema web para gerenciamento e controle digital das obrigaçõe
     -	Exibir em dashboard, em tempo real, os seguintes indicadores:
         -	% de prazos cumpridos
         -	% de alertas enviados com sucesso
-        -	% de documentos processados em <5 s
 -	Gerar relatórios gerenciais
     -	Produzir relatórios mensais (PDF/CSV) com o total de impostos (R$) e variação mês a mês.
 -	 Permitir download de documentos
@@ -101,7 +100,7 @@ Desenvolvimento de um sistema web para o gerenciamento de obrigações tributár
 #### Requisitos Funcionais (RF)
 
 -	[Contabilidade] - RF01: Permitir o cadastro e atualização de e-mail para usuários da contabilidade.
--	[Contabilidade] - RF02: Permitir que usuários da contabilidade gerenciem prazos de entrega, organizados por empresas.
+-	[Contabilidade] - RF02: Permitir que usuários da contabilidade gerenciem prazos de entrega.
 -	[Contabilidade] - RF03: Exibir alertas para documentos pendentes de upload.
 -	[Contabilidade] – RF04: Permitir o envio manual de lembretes sobre documentos não visualizados.
 -	[Contabilidade] – RF05: Permitir que usuários da contabilidade realizem upload, download e visualização de documentos.
@@ -124,7 +123,6 @@ Desenvolvimento de um sistema web para o gerenciamento de obrigações tributár
 -	RNF02: Utilizar autenticação JWT.
 -	RNF03: Sistema de permissões baseado em papéis.
 -	RNF04: Criptografia de dados sensíveis.
--	RNF05: Backup automático.
 -	RNF06: Logs de auditoria.
 -	RNF07: Monitoramento de falhas com Sentry.
 -	RNF08: Escalabilidade com Docker e CI/CD.
@@ -332,26 +330,18 @@ Para garantir que o sistema esteja em conformidade com a LGPD e proteger os dado
     -	No momento do cadastro de contadores e clientes, apresentar checkbox de consentimento para uso de dados tributários.
     -	Um registro de data, hora e termo de consentimento dessa autorização será armazenado em banco para auditoria.
 -	**Criptografia de dados:**    
-    -	Todas as chamadas entre cliente e servidor usarão TLS 1.2 ou superior, garantindo que ninguém intercepte informações em trânsito.
-    -	Dados sensíveis (como CPF, e-mail) serão armazenados criptografados no banco usando AES-256, evitando acesso indevido mesmo em caso de vazamento.
+    -	Dados sensíveis (e-mail) serão armazenados criptografados no banco usando AES-256, evitando acesso indevido mesmo em caso de vazamento.
 
--	**Anonimização de Logs:** 
-    -	Ao salvar registros de atividades (logs), qualquer campo que identifique pessoalmente o usuário será substituído por um identificador genérico (hash), preservando a privacidade.
 -	**Política de Retenção e Exclusão:**
-    -	Documentos sensíveis serão mantidos por até 180 dias após o processamento, depois desse período serão removidos automaticamente.
-    -	Usuários poderão solicitar a exclusão antes do prazo, e o sistema deve atender em até 30 dias.
+    -	Usuários poderão solicitar a exclusão dos documentos, e o sistema deve atender em até 30 dias.
 
 -	**Proteção Contra Ataques:** 
     -	Todas as entradas de usuário passarão por validação de formato (serão escapadas para evitar SQL Injection e XSS).
     -	O servidor Express.js usará Helmet.js para configurar cabeçalhos HTTP seguros, impedindo práticas maliciosas.
 
 -	**Tokens JWT:** 
-    -	O sistema usa JWT para manter sessão autenticada. Cada token de acesso vence em 1 hora e precisará de um refresh token, válido por 7 dias.
+    -	O sistema usa JWT para manter sessão autenticada. Cada token de acesso vence em por 7 dias.
     -	Em caso de refresh expirado, o usuário deverá logar novamente.
-
--	**Backup e Recuperação:**
-    -	Criar snapshot diário do PostgreSQL contendo histórico de obrigações fiscais e documentos, armazenado em S3 com retenção de 30 dias.
-    -	Em caso de falha grave, podemos restaurar o estado do sistema ao último snapshot.
 
 ### 3.4  Stack Tecnológica
 
@@ -360,9 +350,7 @@ Nesta seção, detalhamos as tecnologias escolhidas e explicamos, o porquê de c
 ##### Front-End
 
 •	**React.js:** Interface SPA para painéis de controle de prazos, upload de PDFs e visualização de relatórios mensais.
-•	**Service Workers:** ache de formulários de cadastro e calendários para uso offline em escritórios com internet instável.
 •	**React Testing Library:** Testar componentes como calendário de tributos, lista de documentos e formulários.
-•	**Cypress:** Testes de fluxo completo, por exemplo: upload de PDF, configuração de alerta e visualização de relatório.
 
 ##### Back-end
 -	**Node.js + Express.js:** APIs para upload de documentos, geração de relatórios e envio de notificações por e-mail.
@@ -372,10 +360,9 @@ Nesta seção, detalhamos as tecnologias escolhidas e explicamos, o porquê de c
 -	**Jest:** testes unitários.
 ##### Banco de Dados e Cache
 -	**PostgreSQL:** armazenamento relacional. Justificativa: suporta até 5M docs/mês, particionamento por data e índices B-tree para consultas rápidas.
--	**Redis(planejado:** Cache de dashboards de KPIs fiscais e consultas de calendário para reduzir latência.
+-	**Redis(planejado):** Cache de dashboards de KPIs fiscais e consultas de calendário para reduzir latência.
 ##### Armazenamento e Mensageria
 -	**AWS S3 (ou MinIO):** armazenamento de PDFs.
--	**RabbitMQ (ou Kafka):** Fila para processar alertas de vencimento e envio de e-mails sem bloquear o usuário.
 #### Infraestrutura e DevOps
 -	**Docker:** Containers para serviços de upload, geração de relatórios e workers; HPA para manter desempenho sob pico de envios.
 -	**GitHub Actions:** Pipelines para build, testes e deploy automático de novas versões do SGOT.
@@ -404,6 +391,12 @@ Como o sistema gerencia tributos de várias empresas, precisa ser robusto e esca
 ### 3.6 Roadmap / Futuras Integrações
 -	RF-F01 (futuro) – Integrar via API REST com ERP externo (ex.: ContaAzul) para sincronização de cadastros e obrigações.
 -   Kubernetes para orquestração de containers.
+-   HPA aumenta automaticamente os pods do serviço de relatórios e o cluster escala nós para suportar picos de processamento.
+-   O TaxUploadService usa retry e circuit-breaker, e tarefas/e-mails com falha são reenviados depois via Redis Streams.
+-   O PWA salva formulários offline e sincroniza tudo ao reconectar.
+-	Redis armazena totais mensais e histórico de multas para acelerar dashboards.
+-	Worker pods geram relatórios em lote via jobs agendados, sem sobrecarregar o servidor principal.
+
 
 ## 4. Próximos Passos
 
@@ -422,6 +415,7 @@ TAXGROUP. Multa fiscal: saiba o que é e quando ocorre. Taxgroup, 15 mar. 2023. 
 **Considerações Professor/a:**  
 **Considerações Professor/a:**  
 **Considerações Professor/a:**
+
 
 
 
