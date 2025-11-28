@@ -123,6 +123,7 @@ Desenvolvimento de um sistema web para o gerenciamento de obrigações tributár
 -	RNF02: Utilizar autenticação JWT.
 -	RNF03: Sistema de permissões baseado em papéis.
 -	RNF04: Criptografia de dados sensíveis.
+-	RNF05: Backup automático.
 -	RNF06: Logs de auditoria.
 -	RNF07: Monitoramento de falhas com Sentry.
 -	RNF08: Escalabilidade com Docker e CI/CD.
@@ -415,6 +416,7 @@ TAXGROUP. Multa fiscal: saiba o que é e quando ocorre. Taxgroup, 15 mar. 2023. 
 **Considerações Professor/a:**  
 **Considerações Professor/a:**  
 **Considerações Professor/a:**
+
 
 
 
