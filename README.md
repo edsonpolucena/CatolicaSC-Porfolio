@@ -391,6 +391,8 @@ Como o sistema gerencia tributos de várias empresas, precisa ser robusto e esca
 
 ### 3.6 Roadmap / Futuras Integrações
 -	RF-F01 (futuro) – Integrar via API REST com ERP externo (ex.: ContaAzul) para sincronização de cadastros e obrigações.
+-	RNF05: Backup automático.
+-	RNF09: Aplicar retry, circuit-breaker e fallback em operações críticas (upload e e-mail).
 -   Kubernetes para orquestração de containers.
 -   HPA aumenta automaticamente os pods do serviço de relatórios e o cluster escala nós para suportar picos de processamento.
 -   O TaxUploadService usa retry e circuit-breaker, e tarefas/e-mails com falha são reenviados depois via Redis Streams.
@@ -416,6 +418,7 @@ TAXGROUP. Multa fiscal: saiba o que é e quando ocorre. Taxgroup, 15 mar. 2023. 
 **Considerações Professor/a:**  
 **Considerações Professor/a:**  
 **Considerações Professor/a:**
+
 
 
 
